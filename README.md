@@ -63,4 +63,4 @@ Please find the apk link below:
 [firebase_auth]: https://pub.dev/packages/firebase_auth
 [cloud_firestore]: https://pub.dev/packages/cloud_firestore
 [fluttertoast]: https://pub.dev/packages/fluttertoast
-[apk_link]: 
+[apk_link]: https://drive.google.com/file/d/1y1eGiIPNfW0oBAiro1h7bkeNmlfQfy_Y/view?usp=sharing
