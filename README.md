@@ -53,6 +53,9 @@ Please find the apk link below:
 ## App Walkthrough
 
 
+https://github.com/user-attachments/assets/6213f2d8-e6f5-4158-8263-6d48297aba8c
+
+
 
 [intl]: https://pub.dev/packages/intl
 [flutter_spinkit]: https://pub.dev/packages/flutter_spinkit
