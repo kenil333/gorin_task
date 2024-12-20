@@ -11,5 +11,6 @@
     "alreadyHaveAccount": "Already have an account?",
     "users": "Users",
     "invalidEmail": "Invalid email!",
-    "invalidPassword": "The password must be between 8 and 16 characters in length."
+    "invalidPassword": "The password must be between 8 and 16 characters in length.",
+    "nothingHere": "Nothing here"
 }

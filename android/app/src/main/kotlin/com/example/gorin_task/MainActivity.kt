@@ -1,4 +1,4 @@
-package com.example.gorin_task
+package com.gorin.task
 
 import io.flutter.embedding.android.FlutterActivity
 

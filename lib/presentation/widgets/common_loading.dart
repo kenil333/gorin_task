@@ -11,7 +11,7 @@ class CommonLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SpinKitThreeBounce(
-        color: color ?? AppColor.white.withValues(alpha: 0.8),
+        color: color ?? AppColor.white,
         size: 40,
       ),
     );

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gorin_task/utils/extensions/locale_extension.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/app_color.dart';
 import '../../utils/app_size.dart';
 import '../../utils/app_style.dart';
+import '../providers/auth_provider.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_textfield.dart';
+import '../widgets/common_loading.dart';
 import 'home_screen.dart';
 import 'signup_screen.dart';
 
@@ -58,137 +61,170 @@ class _LoginScreenState extends State<LoginScreen> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        body: Column(
+        body: Stack(
+          fit: StackFit.expand,
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSize.size20,
-                  vertical: 40,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: AppSize.topPadding),
-                    Text(
-                      context.l10n.login,
-                      style: AppStyle.font28600,
+            Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppSize.size20,
+                      vertical: 40,
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      context.l10n.enterYourEmailAndPassword,
-                      style: AppStyle.font16400,
-                    ),
-                    const SizedBox(height: 40),
-                    AppTextfield(
-                      controller: emailTc,
-                      lable: context.l10n.email,
-                      hintText: context.l10n.email,
-                      onChanged: (String value) {
-                        checkEmailAndPassword();
-                      },
-                      validator: (String? value) {
-                        if (value != null && value.validEmail) {
-                          return null;
-                        } else {
-                          return context.l10n.invalidEmail;
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 32),
-                    ValueListenableBuilder<bool>(
-                      valueListenable: obsecurePassword,
-                      builder: (context, obsecure, child) => AppTextfield(
-                        controller: passwordTc,
-                        lable: context.l10n.password,
-                        hintText: context.l10n.password,
-                        isPasswordField: true,
-                        isObsecured: obsecure,
-                        onEyePressed: () {
-                          onPasswordObsecurePressed();
-                        },
-                        onChanged: (String value) {
-                          checkEmailAndPassword();
-                        },
-                        validator: (String? value) {
-                          if (value != null &&
-                              value.length >= 8 &&
-                              value.length <= 16) {
-                            return null;
-                          } else {
-                            return context.l10n.invalidPassword;
-                          }
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 80),
-                    Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(child: Container()),
+                        SizedBox(height: AppSize.topPadding),
                         Text(
-                          "${context.l10n.dontHaveAccount} ",
-                          style: AppStyle.font16400.copyWith(
-                            color: AppColor.textPrimary,
-                          ),
+                          context.l10n.login,
+                          style: AppStyle.font28600,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pushNamed(SignupScreen.id);
+                        const SizedBox(height: 16),
+                        Text(
+                          context.l10n.enterYourEmailAndPassword,
+                          style: AppStyle.font16400,
+                        ),
+                        const SizedBox(height: 40),
+                        AppTextfield(
+                          controller: emailTc,
+                          lable: context.l10n.email,
+                          hintText: context.l10n.email,
+                          onChanged: (String value) {
+                            checkEmailAndPassword();
                           },
-                          child: Text(
-                            context.l10n.signUp,
-                            style: AppStyle.font16400.copyWith(
-                              color: AppColor.primary,
+                          validator: (String? value) {
+                            if (value != null && value.validEmail) {
+                              return null;
+                            } else {
+                              return context.l10n.invalidEmail;
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        ValueListenableBuilder<bool>(
+                          valueListenable: obsecurePassword,
+                          builder: (context, obsecure, child) => AppTextfield(
+                            controller: passwordTc,
+                            lable: context.l10n.password,
+                            hintText: context.l10n.password,
+                            isPasswordField: true,
+                            isObsecured: obsecure,
+                            onEyePressed: () {
+                              onPasswordObsecurePressed();
+                            },
+                            onChanged: (String value) {
+                              checkEmailAndPassword();
+                            },
+                            validator: (String? value) {
+                              if (value != null &&
+                                  value.length >= 8 &&
+                                  value.length <= 16) {
+                                return null;
+                              } else {
+                                return context.l10n.invalidPassword;
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 80),
+                        Row(
+                          children: [
+                            Expanded(child: Container()),
+                            Text(
+                              "${context.l10n.dontHaveAccount} ",
+                              style: AppStyle.font16400.copyWith(
+                                color: AppColor.textPrimary,
+                              ),
                             ),
-                          ),
+                            GestureDetector(
+                              onTap: () {
+                                FocusScope.of(context).unfocus();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SignupScreen()),
+                                );
+                              },
+                              child: Text(
+                                context.l10n.signUp,
+                                style: AppStyle.font16400.copyWith(
+                                  color: AppColor.primary,
+                                ),
+                              ),
+                            ),
+                            Expanded(child: Container()),
+                          ],
                         ),
-                        Expanded(child: Container()),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            ValueListenableBuilder<bool>(
-              valueListenable: allowSignInPress,
-              builder: (context, allow, child) => Visibility(
-                visible: allow,
-                child: Column(
-                  children: [
-                    Row(
+                ValueListenableBuilder<bool>(
+                  valueListenable: allowSignInPress,
+                  builder: (context, allow, child) => Visibility(
+                    visible: allow,
+                    child: Column(
                       children: [
-                        SizedBox(width: AppSize.size20),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                height: 1,
-                                color: AppColor.devider,
+                        Row(
+                          children: [
+                            SizedBox(width: AppSize.size20),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 1,
+                                    color: AppColor.devider,
+                                  ),
+                                  const SizedBox(height: 24),
+                                  Selector<AuthProvider, bool>(
+                                    builder: (context, loading, child) =>
+                                        AppButton(
+                                      title: context.l10n.login,
+                                      onPressed: () {
+                                        FocusScope.of(context).unfocus();
+                                        context.read<AuthProvider>().login(
+                                              email: emailTc.text.trim(),
+                                              password: passwordTc.text.trim(),
+                                              onSuccess: () {
+                                                Navigator.of(context)
+                                                    .pushAndRemoveUntil(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const HomeScreen(),
+                                                  ),
+                                                  (route) => false,
+                                                );
+                                              },
+                                            );
+                                      },
+                                      otherWidget: loading
+                                          ? const CommonLoading()
+                                          : null,
+                                    ),
+                                    selector: (context, ap) => ap.signInLoading,
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 24),
-                              AppButton(
-                                title: context.l10n.login,
-                                onPressed: () {
-                                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                    HomeScreen.id,
-                                    (route) => false,
-                                  );
-                                },
-                                // otherWidget: controller.isApiRunning.value
-                                //     ? const CommonButtonLoading()
-                                //     : null,
-                              ),
-                            ],
-                          ),
+                            ),
+                            SizedBox(width: AppSize.size20),
+                          ],
                         ),
-                        SizedBox(width: AppSize.size20),
+                        SizedBox(height: AppSize.bottomPadding + 24),
                       ],
                     ),
-                    SizedBox(height: AppSize.bottomPadding + 24),
-                  ],
+                  ),
                 ),
-              ),
+              ],
+            ),
+            Selector<AuthProvider, bool>(
+              builder: (context, loading, child) => loading
+                  ? Container(
+                      color: Colors.transparent,
+                    )
+                  : const SizedBox(),
+              selector: (context, ap) => ap.signInLoading,
             ),
           ],
         ),

@@ -10,4 +10,5 @@ class AppColor {
   static const Color devider = Color(0xFFF0F7FF);
   static const Color optionalButton = Color(0xFFE6EEFB);
   static const Color hintColor = Color(0xFFBDBDBD);
+  static const Color appRed = Color(0xFFF54336);
 }

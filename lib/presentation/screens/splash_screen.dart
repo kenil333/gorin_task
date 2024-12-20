@@ -2,11 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/app_color.dart';
 import '../../utils/app_image.dart';
 import '../../utils/app_size.dart';
+import '../providers/auth_provider.dart';
 import '../widgets/common_loading.dart';
+import 'home_screen.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -21,9 +24,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 2)).then((_) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        LoginScreen.id,
-        (route) => false,
+      context.read<AuthProvider>().checkLoginSession(
+        onLoggedIn: () {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            (route) => false,
+          );
+        },
+        onNotLoggedIn: () {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (route) => false,
+          );
+        },
       );
     });
     super.initState();
