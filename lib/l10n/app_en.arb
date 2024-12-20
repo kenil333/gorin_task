@@ -1,0 +1,15 @@
+{
+    "@@locale": "en",
+    "enterYourEmailAndPassword": "Please enter your email and password to login.",
+    "email": "Email",
+    "password": "Password",
+    "login": "Login",
+    "dontHaveAccount": "Don't have an account?",
+    "signUp": "Sign Up",
+    "provideNecessaryDetails": "Please provide the necessary details to create your account.",
+    "name": "Name",
+    "alreadyHaveAccount": "Already have an account?",
+    "users": "Users",
+    "invalidEmail": "Invalid email!",
+    "invalidPassword": "The password must be between 8 and 16 characters in length."
+}
